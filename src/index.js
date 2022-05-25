@@ -11,26 +11,45 @@ Create a new ramen after submitting the new-ramen form. The new ramen should be 
 3) each image has ID, how do you select each ID through the foreach?
 */
 
-// addEventListener('click', function () {
-//   const mainImgID = document.querySelector('#detail-image')
-//   mainImgID.append()
+// addEventListener('click', () => {
+//   const detailImg = document.getElementById('ramen-detail').getElementsByClassName
+//     ('detail-image');
+//   let ramenImg = document.getElementsByClassName('images')
+//   console.log((ramenImg[ ramen.id ]))
 // })
 
-function renderRamenMenu () {
-  fetch('http://localhost:3000/ramens')
-    .then(response => response.json())
-    .then(json => {
-      const menu = document.querySelector('#ramen-menu')
-      json.forEach(ramen => {
-        menu.innerHTML += `<img id="${ramen.id}" class="images" src="${ramen.image}">`
-      })
-      addEventListener('click', () => {
-        const detailImg = document.getElementById('ramen-detail').getElementsByClassName
-          ('detail-image');
-        let ramenImg = document.getElementsByClassName('images')
-        console.log((ramenImg[ ramen.id ]))
-      })
 
-    });
-}
-renderRamenMenu()
+fetch('http://localhost:3000/ramens')
+  .then(response => response.json())
+  .then(json => {
+    const ramenMenu = document.querySelector('#ramen-menu')
+
+    json.forEach(oneRamen => {
+      console.log(oneRamen)
+      const image = document.createElement('img')
+      image.src = oneRamen.image
+      ramenMenu.append(image)
+
+      // add event click
+      image.addEventListener('click', () => {
+        console.log(oneRamen)
+        const imageToUpdate = document.querySelector(
+          "#ramen-detail img.detail-image"
+        );
+        imageToUpdate.src = oneRamen.image
+        imageToUpdate.alt = oneRamen.name
+
+        const name = document.querySelector('#ramen-detail h2')
+        name.textContent = oneRamen.name
+
+        const restaurant = document.querySelector('#ramen-detail h3')
+        restaurant.textContent = oneRamen.restaurant
+
+        const rating = document.getElementById('rating-display')
+        rating.textContent = oneRamen.rating
+
+        const comment = document.getElementById('comment-display')
+        comment.textContent = oneRamen.comment
+      })
+    })
+  });
